@@ -1,7 +1,9 @@
 package com.emsi.springreddit;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,16 +14,22 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class DatabaseTest {
 
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    @Value("${spring.datasource.url}")
+    private String url;
+
+
     @Test
     void contextLoads() {
     }
 
     @Test
     void testDbConnection(){
-        String username = System.getProperty("spring.datasource.username");
-        String password = System.getProperty("spring.datasource.password");
-        String url = System.getProperty("spring.datasource.url");
-
         try {
             Connection conn = DriverManager.getConnection(url, username, password);
             assertNotNull(conn);
@@ -29,4 +37,5 @@ class DatabaseTest {
             fail("Connection failed: " + e.getMessage());
         }
     }
+
 }
