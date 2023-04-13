@@ -30,9 +30,13 @@ The application should now be running on http://localhost:8080.
 This application was built using the following technologies:
 
 Spring Boot
+
 Spring Data JPA
+
 Thymeleaf
+
 Bootstrap
+
 PostgreSQL
 
 ## Contributing
