@@ -28,7 +28,15 @@ git clone https://github.com/DaddaAdam/Spring-Reddit.git
 cd Spring-Reddit
 ```
 
-3. Run the application using Maven
+3. For app to work locally services present in docker-compose.yml file must be running
+```bash
+# Docker required
+docker-compose up -d
+# Or
+docker compose up -d
+```
+
+4. Run the application using Maven
 ```bash
 mvn spring-boot:run
 ```
@@ -47,10 +55,13 @@ The application should now be running on http://localhost:8080.
 This application was built using the following technologies:
 
 >Spring Boot
+
 >Spring Data JPA
->Thymeleaf
->Bootstrap
->PostgreSQL
+
+>React
+
+>MySQL
+
 ## Contributing
 We welcome contributions from anyone who is interested in helping to improve this project. If you would like to contribute to this project, here are the steps to contribute.
 1. Check the [issues section](https://github.com/DaddaAdam/Spring-Reddit/issues)
