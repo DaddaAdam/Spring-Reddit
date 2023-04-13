@@ -39,7 +39,7 @@ The application should now be running on http://localhost:8080.
 1. To use the application, you can access it through a web browser at http://localhost:8080.
 2. Register a new user account by clicking on the "Sign Up" button on the top right corner of the page.
 3. Once you have registered, you can log in using your username and password.
-4 You can create a new post by clicking on the "Create Post" button on the top right corner of the page.
+4. You can create a new post by clicking on the "Create Post" button on the top right corner of the page.
 5. You can upvote or downvote a post by clicking on the upvote or downvote buttons next to the post.
 6. You can comment on a post by clicking on the "Comment" button below the post and entering your comment.
 
