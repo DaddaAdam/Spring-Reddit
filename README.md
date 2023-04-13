@@ -29,15 +29,15 @@ The application should now be running on http://localhost:8080.
 ## Technologies Used
 This application was built using the following technologies:
 
-Spring Boot
+>Spring Boot
 
-Spring Data JPA
+>Spring Data JPA
 
-Thymeleaf
+>Thymeleaf
 
-Bootstrap
+>Bootstrap
 
-PostgreSQL
+>PostgreSQL
 
 ## Contributing
 If you would like to contribute to this project, check the [contribute section](https://github.com/DaddaAdam/Spring-Reddit/issues).
