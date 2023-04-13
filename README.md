@@ -39,6 +39,7 @@ PostgreSQL
 If you would like to contribute to this project, check the [contribute section](https://github.com/DaddaAdam/Spring-Reddit/issues).
 
 ## Acknowledgments
-This project was inspired by Reddit
+This project was inspired by [Reddit](https://www.reddit.com/)
+
 Thank you to the Spring community for their amazing documentation and resources.
 
