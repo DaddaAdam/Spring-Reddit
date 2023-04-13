@@ -35,11 +35,8 @@ Thymeleaf
 Bootstrap
 PostgreSQL
 
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Contributing
-If you would like to contribute to this project, please follow the guidelines in CONTRIBUTING.md.
+If you would like to contribute to this project, check the [contribute section](https://github.com/DaddaAdam/Spring-Reddit/issues).
 
 ## Acknowledgments
 This project was inspired by Reddit
