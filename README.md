@@ -28,7 +28,7 @@ git clone https://github.com/DaddaAdam/Spring-Reddit.git
 cd Spring-Reddit
 ```
 
-3. For app to work locally services present in docker-compose.yml file must be running
+3. For app to work locally services present in ```docker-compose.yml``` file must be running
 ```bash
 # Docker required
 docker-compose up -d
