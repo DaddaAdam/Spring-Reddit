@@ -57,15 +57,13 @@ This application was built using the following technologies:
 >PostgreSQL
 
 ## Contributing
-If you would like to contribute to this project, check the [contribute section](https://github.com/DaddaAdam/Spring-Reddit/issues).
-
-Steps to Contribute:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes.
-4. Test your changes.
-5. Submit a pull request.
+We welcome contributions from anyone who is interested in helping to improve this project. If you would like to contribute to this project, here are the steps to contribute.
+1. Check the [issues section](https://github.com/DaddaAdam/Spring-Reddit/issues)
+2. Fork the repository.
+3. Create a new branch for your feature or bug fix.
+4. Make your changes.
+5. Test your changes.
+6. Submit a pull request.
 
 ## Acknowledgements
 This project was inspired by [Reddit](https://www.reddit.com/)
