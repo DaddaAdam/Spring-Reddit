@@ -1,6 +1,7 @@
 package com.emsi.springreddit;
 
 import com.emsi.springreddit.entities.Post;
+import jakarta.transaction.Transactional;
 import org.junit.Assert;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -31,6 +32,7 @@ public class PostRepositoryTest {
 
     @Test
     @Order(2)
+    @Transactional
     public void shouldGetAllPosts(){
         List<Post> posts = postRepository.findAll();
 
@@ -42,15 +44,14 @@ public class PostRepositoryTest {
     @Test
     @Order(3)
     public void shouldGetPostById(){
-        Long postId = postRepository.findAll().get(1).getPostId();
-
+        Long postId = postRepository.findAll().get(1).getId();
         Assert.assertTrue(postRepository.findById(postId).isPresent());
     }
 
     @Test
     @Order(4)
     public void shouldDeletePostById(){
-        Long postId = postRepository.findAll().get(1).getPostId();
+        Long postId = postRepository.findAll().get(1).getId();
         postRepository.deleteById(postId);
 
         Assert.assertFalse(postRepository.findById(postId).isPresent());
