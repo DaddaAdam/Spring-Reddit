@@ -2,13 +2,9 @@ package com.emsi.springreddit;
 
 import com.emsi.springreddit.entities.Post;
 import jakarta.transaction.Transactional;
-import org.junit.Assert;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.junit.jupiter.api.Test;
 import com.emsi.springreddit.repository.PostRepository;
 
 import java.time.Instant;
@@ -45,7 +41,7 @@ public class PostRepositoryTest {
     @Order(3)
     public void shouldGetPostById(){
         Long postId = postRepository.findAll().get(1).getId();
-        Assert.assertTrue(postRepository.findById(postId).isPresent());
+        Assertions.assertTrue(postRepository.findById(postId).isPresent());
     }
 
     @Test
@@ -54,7 +50,7 @@ public class PostRepositoryTest {
         Long postId = postRepository.findAll().get(1).getId();
         postRepository.deleteById(postId);
 
-        Assert.assertFalse(postRepository.findById(postId).isPresent());
+        Assertions.assertFalse(postRepository.findById(postId).isPresent());
     }
 
     @Test
@@ -63,6 +59,6 @@ public class PostRepositoryTest {
         postRepository.deleteAll();
 
         int postsLength = postRepository.findAll().size();
-        Assert.assertEquals(0, postsLength);
+        Assertions.assertEquals(0, postsLength);
     }
 }
