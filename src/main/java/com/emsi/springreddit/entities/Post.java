@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,19 +21,23 @@ import java.time.Instant;
 public class Post {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long postId;
+    private Long id;
     private String postName;
     private String url;
     @Lob
     private String description;
     private Integer voteCount = 0;
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
     private Instant createdDate;
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "id")
     private Subreddit subreddit;
+
+    @OneToMany(mappedBy = "post", fetch = LAZY, targetEntity = Comment.class)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", fetch = LAZY, targetEntity = Vote.class)
+    private List<Vote> votes;
 
     public Post(String postName, String url, String description, Integer voteCount, User user, Instant createdDate, Subreddit subreddit) {
         this.postName = postName;

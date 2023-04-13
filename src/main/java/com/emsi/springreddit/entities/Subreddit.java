@@ -23,9 +23,9 @@ public class Subreddit {
     private Long id;
     private String name;
     private String description;
-    @OneToMany(fetch = LAZY)
-    private List<Post> posts;
     private Instant createdDate;
     @ManyToOne(fetch = LAZY)
     private User user;
+    @OneToMany(mappedBy = "subreddit", fetch = LAZY, targetEntity = Post.class)
+    private List<Post> posts;
 }
