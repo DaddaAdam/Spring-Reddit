@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import java.time.Instant;
 
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,10 +15,10 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class VerificationToken {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String token;
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private User user;
     private Instant expiryDate;
 }

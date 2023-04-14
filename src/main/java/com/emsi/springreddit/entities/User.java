@@ -2,8 +2,6 @@ package com.emsi.springreddit.entities;
 
 import jakarta.persistence.*;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -22,7 +20,7 @@ import java.util.List;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "Username is required")
     private String username;
