@@ -8,8 +8,6 @@ import lombok.Setter;
 
 import java.time.Instant;
 
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Setter
@@ -18,12 +16,12 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 public class Comment {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String text;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Post post;
     private Instant createdDate;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 }

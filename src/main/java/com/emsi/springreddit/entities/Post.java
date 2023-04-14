@@ -1,9 +1,6 @@
 package com.emsi.springreddit.entities;
 
-
 import jakarta.persistence.*;
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,23 +17,23 @@ import java.util.List;
 @NoArgsConstructor
 public class Post {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String postName;
     private String url;
     @Lob
     private String description;
     private Integer voteCount = 0;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
     private Instant createdDate;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Subreddit subreddit;
 
-    @OneToMany(mappedBy = "post", fetch = LAZY, targetEntity = Comment.class)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, targetEntity = Comment.class)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post", fetch = LAZY, targetEntity = Vote.class)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, targetEntity = Vote.class)
     private List<Vote> votes;
 
     public Post(String postName, String url, String description, Integer voteCount, User user, Instant createdDate, Subreddit subreddit) {
