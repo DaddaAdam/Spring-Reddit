@@ -1,4 +1,4 @@
-package com.emsi.springreddit;
+package com.emsi.springreddit.repository;
 
 import com.emsi.springreddit.entities.Post;
 import jakarta.transaction.Transactional;
