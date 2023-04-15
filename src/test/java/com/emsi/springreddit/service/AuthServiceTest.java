@@ -1,9 +1,8 @@
 package com.emsi.springreddit.service;
 
 
-import com.emsi.springreddit.dto.RegisterRequest;
+import com.emsi.springreddit.dto.request.RegisterRequest;
 import com.emsi.springreddit.repository.UserRepository;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

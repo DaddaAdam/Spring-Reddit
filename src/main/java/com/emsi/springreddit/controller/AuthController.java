@@ -1,6 +1,7 @@
 package com.emsi.springreddit.controller;
 
-import com.emsi.springreddit.dto.RegisterRequest;
+import com.emsi.springreddit.dto.request.RegisterRequest;
+import com.emsi.springreddit.dto.response.RegisterResponse;
 import com.emsi.springreddit.exception.UserAlreadyExistsException;
 import com.emsi.springreddit.service.AuthService;
 import lombok.AllArgsConstructor;
@@ -20,14 +21,25 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<RegisterResponse> signup(@RequestBody RegisterRequest registerRequest) {
         try{
             authService.signup(registerRequest);
-            return new ResponseEntity<>("User Registration Successful",
-                    HttpStatus.OK);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new RegisterResponse(
+                            HttpStatus.OK.value(),
+                            "User Registration Successful",
+                            null)
+                    );
+
         }catch(UserAlreadyExistsException exception){
-            return new ResponseEntity<>(exception.getMessage(),
-                    HttpStatus.CONFLICT);
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(new RegisterResponse(
+                            HttpStatus.CONFLICT.value(),
+                            "User Already Exists",
+                            exception.getMessage())
+                    );
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.emsi.springreddit.service;
 
-import com.emsi.springreddit.dto.RegisterRequest;
+import com.emsi.springreddit.dto.request.RegisterRequest;
 import com.emsi.springreddit.entities.User;
 import com.emsi.springreddit.entities.VerificationToken;
 import com.emsi.springreddit.exception.UserAlreadyExistsException;

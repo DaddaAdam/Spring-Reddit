@@ -1,4 +1,4 @@
-package com.emsi.springreddit.dto;
+package com.emsi.springreddit.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
