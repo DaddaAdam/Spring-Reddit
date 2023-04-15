@@ -9,17 +9,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf().disable()
-                .authorizeHttpRequests()
-                .dispatcherTypeMatchers(HttpMethod.valueOf("/api/auth/**"))
-                .permitAll()
-                .anyRequest()
-                .authenticated();
+        httpSecurity.cors().and()
+                .csrf().disable()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST,"/api/auth/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated());
+
 
         return httpSecurity.build();
     }
