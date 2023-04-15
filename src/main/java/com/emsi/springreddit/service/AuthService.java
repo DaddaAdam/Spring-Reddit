@@ -3,6 +3,7 @@ package com.emsi.springreddit.service;
 import com.emsi.springreddit.dto.RegisterRequest;
 import com.emsi.springreddit.entities.User;
 import com.emsi.springreddit.entities.VerificationToken;
+import com.emsi.springreddit.exception.UserAlreadyExistsException;
 import com.emsi.springreddit.repository.UserRepository;
 import com.emsi.springreddit.repository.VerificationTokenRepository;
 import jakarta.transaction.Transactional;
@@ -22,7 +23,15 @@ public class AuthService {
 
     @Transactional
     public void signup(RegisterRequest registerRequest){
+        if(userRepository.findByUsername(registerRequest.getUsername()).isPresent()){
+            throw new UserAlreadyExistsException("Registration failed: username is already taken");
+        }
+        if(userRepository.findByUsername(registerRequest.getEmail()).isPresent()){
+            throw new UserAlreadyExistsException("Registration failed: email is already taken");
+        }
+
         User user = new User();
+
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
