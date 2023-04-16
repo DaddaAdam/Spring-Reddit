@@ -30,7 +30,10 @@ public class SubredditService {
     @Transactional
     public Subreddit createSubreddit(SubredditRequest subredditRequest, User user){
         var subreddit = new Subreddit();
-        subreddit.setName(subredditRequest.getName());
+        if (subredditRequest.getName() != null && subredditRequest.getName().isBlank())
+            throw new DataIntegrityViolationException("Subreddit name cannot be empty");
+
+        subreddit.setName(subredditRequest.getName() != null ? subredditRequest.getName().replaceAll("\\s", "") : null);
         subreddit.setDescription(subredditRequest.getDescription());
         subreddit.setCreatedDate(Instant.now());
         subreddit.setUser(user);
@@ -48,8 +51,12 @@ public class SubredditService {
     @Transactional
     public Subreddit updateSubreddit(SubredditRequest subredditRequest, Long subredditId){
         var subreddit = subredditRepository.findById(subredditId).orElseThrow();
-        subreddit.setName(subredditRequest.getName());
-        subreddit.setDescription(subredditRequest.getDescription());
+        if (subredditRequest.getName() != null) {
+            if (subredditRequest.getName().isBlank())
+                throw new DataIntegrityViolationException("Subreddit name cannot be empty");
+            subreddit.setName(subredditRequest.getName().replaceAll("\\s", ""));
+        }
+        if (subredditRequest.getDescription() != null) subreddit.setDescription(subredditRequest.getDescription());
         if (subredditRequest.getNewOwner() != null){
             try {
                 subreddit.setUser(userService.getUserByUsername(subredditRequest.getNewOwner()));
