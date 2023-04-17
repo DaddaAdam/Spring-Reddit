@@ -69,6 +69,7 @@ public class ApplicationConfiguration {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Credentials credentials = objectMapper.readValue(response.getSecretString(), Credentials.class);
+        System.setProperty("SECRET_KEY", credentials.getSECRET_KEY());
         return dataSourceBuilder
                 .url("jdbc:" + credentials.getEngine() + "://" + credentials.getHost() + ":" + credentials.getPort() + "/" + credentials.getDbname())
                 .username(credentials.getUsername())
@@ -87,5 +88,6 @@ public class ApplicationConfiguration {
         private int port;
         private String dbname;
         private String dbInstanceIdentifier;
+        private String SECRET_KEY;
     }
 }
