@@ -1,6 +1,8 @@
 package com.emsi.springreddit.exception;
 
-public class UserAlreadyExistsException extends RuntimeException{
+import java.sql.SQLIntegrityConstraintViolationException;
+
+public class UserAlreadyExistsException extends SQLIntegrityConstraintViolationException {
     public UserAlreadyExistsException(String message) {
         super(message);
     }
