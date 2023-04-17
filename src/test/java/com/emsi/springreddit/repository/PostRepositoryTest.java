@@ -5,10 +5,13 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+
 import java.time.Instant;
 import java.util.List;
 
 @SpringBootTest
+@TestPropertySource(locations = "classpath:application-test.properties")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PostRepositoryTest {
     @Autowired
