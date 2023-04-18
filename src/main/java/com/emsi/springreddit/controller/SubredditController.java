@@ -2,11 +2,12 @@ package com.emsi.springreddit.controller;
 
 import com.emsi.springreddit.dto.GenericResponse;
 import com.emsi.springreddit.dto.request.SubredditRequest;
-import com.emsi.springreddit.repository.UserRepository;
+import com.emsi.springreddit.entities.User;
 import com.emsi.springreddit.service.SubredditService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -17,11 +18,8 @@ import org.springframework.web.client.HttpClientErrorException;
 public class SubredditController {
     private final SubredditService subredditService;
 
-    // TODO: MUST BE REMOVED AND GET THE USER FROM THE CONTEXT
-    private final UserRepository userRepository;
-
     @GetMapping(path = "/{name}", produces = "application/json")
-    public ResponseEntity<GenericResponse> getSubredditByUsername(@PathVariable String name){
+    public ResponseEntity<GenericResponse> getSubredditByName(@PathVariable String name){
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -37,8 +35,26 @@ public class SubredditController {
         }
     }
 
+    @GetMapping(path = "/id/{id}", produces = "application/json")
+    public ResponseEntity<GenericResponse> getSubredditById(@PathVariable Long id){
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new GenericResponse(
+                            HttpStatus.OK.value(),
+                            "Subreddit found",
+                            null,
+                            subredditService.getSubredditById(id)
+                    ));
+        }
+        catch (Exception exception){
+            return this.handleExceptions(exception);
+        }
+    }
+
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<GenericResponse> createSubreddit(@RequestBody SubredditRequest subredditRequest) {
+        var user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -46,9 +62,8 @@ public class SubredditController {
                             HttpStatus.OK.value(),
                             "Subreddit created",
                             null,
-                            // TODO: MUST GET THE USER FROM THE CONTEXT
                             subredditService.createSubreddit(subredditRequest,
-                                    userRepository.findAll().get(0)
+                                    user
                             )
                     ));
         }
@@ -60,8 +75,9 @@ public class SubredditController {
     @PatchMapping (path = "/{id}", produces = "application/json", consumes = "application/json")
     public ResponseEntity<GenericResponse> updateSubreddit(@RequestBody SubredditRequest subredditRequest, @PathVariable Long id) {
         try {
-            // TODO: MUST VERIFY IF THE USER IS THE OWNER OF THE SUBREDDIT
-            if (false) {
+            var user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            var subreddit = subredditService.getSubredditById(id);
+            if (!subreddit.getUser().getId().equals(user.getId())) {
                 throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
             }
             return ResponseEntity
@@ -81,8 +97,9 @@ public class SubredditController {
     @DeleteMapping(path = "/{id}", produces = "application/json")
     public ResponseEntity<GenericResponse> deleteSubreddit(@PathVariable Long id) {
         try {
-            // TODO: MUST VERIFY IF THE USER IS THE OWNER OF THE SUBREDDIT
-            if (false) {
+            var user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            var subreddit = subredditService.getSubredditById(id);
+            if (!subreddit.getUser().getId().equals(user.getId())) {
                 throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
             }
             subredditService.deleteSubreddit(id);

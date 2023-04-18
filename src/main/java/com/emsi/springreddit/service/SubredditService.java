@@ -27,6 +27,15 @@ public class SubredditService {
         }
     }
 
+    public Subreddit getSubredditById(Long id){
+        try {
+            return subredditRepository.findById(id).orElseThrow();
+        }
+        catch (NoSuchElementException exception){
+            throw new NoSuchElementException("Subreddit not found");
+        }
+    }
+
     @Transactional
     public Subreddit createSubreddit(SubredditRequest subredditRequest, User user){
         var subreddit = new Subreddit();
