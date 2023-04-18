@@ -1,5 +1,6 @@
 package com.emsi.springreddit.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -30,9 +31,11 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER)
     private Subreddit subreddit;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, targetEntity = Comment.class)
     private List<Comment> comments;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, targetEntity = Vote.class)
     private List<Vote> votes;
 
