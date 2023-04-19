@@ -1,10 +1,21 @@
 package com.emsi.springreddit.service;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.secretsmanager.AWSSecretsManager;
+import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
+import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
+import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.security.Key;
@@ -15,9 +26,29 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    //this is a dummy secret_key for dev/test environment
-    private static final String SECRET_KEY = "404D635166546A576E5A7234753778214125442A472D4B614E645267556B5870";
-    //todo: retrieve the real secret key from aws for production environment
+    Logger logger = org.slf4j.LoggerFactory.getLogger(JwtService.class);
+    private final String SECRET_KEY;
+
+    public JwtService(@Value("${jwt.secret}") String secretKey) throws JsonProcessingException {
+        if (System.getenv("AWS_ACCESS_KEY_ID") == null || System.getenv("AWS_SECRET_ACCESS_KEY") == null)
+        {
+            logger.warn("Missing AWS environment variables, using NOT SECURE secret key from application.properties");
+            SECRET_KEY = secretKey;
+            return;
+        }
+        logger.info("AWS environment variables found, using AWS secret manager to retrieve JWT secret key");
+        AWSSecretsManager secretsManager = AWSSecretsManagerClientBuilder.standard()
+                .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
+                .withRegion(Regions.EU_WEST_3)
+                .build();
+
+        GetSecretValueRequest request = new GetSecretValueRequest().withSecretId("usersDbPass");
+        GetSecretValueResult result = secretsManager.getSecretValue(request);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(result.getSecretString());
+        SECRET_KEY = root.get("SECRET_KEY").asText();
+        logger.info("Secret key retrieved from AWS secret manager");
+    }
 
     public String extractUsername(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
