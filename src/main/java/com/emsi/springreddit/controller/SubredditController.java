@@ -118,6 +118,10 @@ public class SubredditController {
     }
 
     private ResponseEntity<GenericResponse> handleExceptions(Exception exception) {
+        return getGenericResponseResponseEntity(exception);
+    }
+
+    static ResponseEntity<GenericResponse> getGenericResponseResponseEntity(Exception exception) {
         return switch (exception.getClass().getName()) {
             case "org.springframework.dao.DataIntegrityViolationException" -> ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -139,7 +143,7 @@ public class SubredditController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(new GenericResponse(
                             HttpStatus.FORBIDDEN.value(),
-                            "You are not the owner of this subreddit",
+                            "You are not the owner of this resource",
                             "Forbidden",
                             null
                     ));
