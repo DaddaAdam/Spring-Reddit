@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 import java.util.List;
@@ -27,6 +29,7 @@ public class Subreddit {
     private Instant createdDate;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
     @OneToMany(mappedBy = "subreddit", fetch = FetchType.LAZY, targetEntity = Post.class)
     @JsonIgnore
