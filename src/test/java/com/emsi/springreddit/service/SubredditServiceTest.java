@@ -228,7 +228,7 @@ public class SubredditServiceTest {
 
     @Test
     public void shouldDeleteSubreddit(){
-        subredditService.deleteSubreddit(3L);
+        subredditService.deleteSubreddit(1L);
         Assertions.assertThrowsExactly(
                 NoSuchElementException.class,
                 () -> subredditService.getSubredditByName("java")
