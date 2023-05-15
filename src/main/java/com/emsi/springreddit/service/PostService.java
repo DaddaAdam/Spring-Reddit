@@ -10,7 +10,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -29,26 +28,28 @@ public class PostService {
 
     @Transactional
     public Post createPost(PostRequest postRequest, User user){
-        try {
-            var post = new Post();
-            post.setPostName(postRequest.getTitle());
-            post.setDescription(postRequest.getContent());
-            post.setCreatedDate(java.time.Instant.now());
-            post.setSubreddit(subredditService.getSubredditById(postRequest.getSubredditId()));
-            post.setUrl(postRequest.getUrl());
-            post.setUser(user);
-            return postRepository.save(post);
-        }
-        catch (DataIntegrityViolationException exception){
-            if(Objects.requireNonNull(exception.getRootCause()).getMessage().startsWith("Duplicate entry")){
-                throw new DataIntegrityViolationException("Subreddit already exists");
-            }
-            throw new DataIntegrityViolationException(exception.getRootCause().getMessage());
-        }
+        if (postRequest.getTitle() == null || postRequest.getTitle().isBlank()) throw new DataIntegrityViolationException("Post title is required");
+        if (postRequest.getContent() == null || postRequest.getContent().isBlank()) throw new DataIntegrityViolationException("Post content is required");
+        if (postRequest.getUrl() == null || postRequest.getUrl().isBlank()) throw new DataIntegrityViolationException("Post url is required");
+        if (!postRequest.getUrl().matches("^(http|https)://.*$")) throw new DataIntegrityViolationException("Post url is invalid");
+
+        var post = new Post();
+        post.setPostName(postRequest.getTitle());
+        post.setDescription(postRequest.getContent());
+        post.setCreatedDate(java.time.Instant.now());
+        post.setSubreddit(subredditService.getSubredditById(postRequest.getSubredditId()));
+        post.setUrl(postRequest.getUrl());
+        post.setUser(user);
+        return postRepository.save(post);
     }
 
     @Transactional
     public Post updatePost(Long id, PostRequest postRequest, User user){
+        if (postRequest.getTitle().isBlank()) throw new DataIntegrityViolationException("Post title is required");
+        if (postRequest.getContent().isBlank()) throw new DataIntegrityViolationException("Post content is required");
+        if (postRequest.getUrl().isBlank()) throw new DataIntegrityViolationException("Post url is required");
+        if (!postRequest.getUrl().matches("^(http|https)://.*$")) throw new DataIntegrityViolationException("Post url is invalid");
+
         var post = postRepository.findById(id).orElseThrow();
         if(!post.getUser().getUsername().equals(user.getUsername())) throw new RuntimeException("You are not allowed to update this post");
         if (postRequest.getTitle() != null && !postRequest.getTitle().isBlank()) post.setPostName(postRequest.getTitle());
@@ -58,19 +59,15 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long id, User user){
+    public boolean deletePost(Long id, User user){
         var post = postRepository.findById(id).orElseThrow();
         if(!post.getUser().getUsername().equals(user.getUsername())) throw new RuntimeException("You are not allowed to delete this post");
         postRepository.delete(post);
+        return true;
     }
 
     public List<Post> getPostsBySubredditName(String subredditName){
-        try {
-            return postRepository.findAllBySubreddit(subredditService.getSubredditByName(subredditName));
-        }
-        catch (Exception exception){
-            throw new RuntimeException("Post not found");
-        }
+        return postRepository.findAllBySubreddit(subredditService.getSubredditByName(subredditName));
     }
 
     @Transactional
