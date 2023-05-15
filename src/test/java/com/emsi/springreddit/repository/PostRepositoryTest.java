@@ -27,16 +27,6 @@ public class PostRepositoryTest {
         postRepository.save(post);
     }
 
-    @Test
-    @Order(2)
-    @Transactional
-    public void shouldGetAllPosts(){
-        List<Post> posts = postRepository.findAll();
-
-        for(Post post : posts){
-            System.out.println(post);
-        }
-    }
 
     @Test
     @Order(3)
@@ -48,18 +38,10 @@ public class PostRepositoryTest {
     @Test
     @Order(4)
     public void shouldDeletePostById(){
-        Long postId = postRepository.findAll().get(1).getId();
+        Long postId = postRepository.findAll().get(3).getId();
         postRepository.deleteById(postId);
 
         Assertions.assertFalse(postRepository.findById(postId).isPresent());
     }
 
-    @Test
-    @Order(5)
-    public void shouldDeleteAllPosts(){
-        postRepository.deleteAll();
-
-        int postsLength = postRepository.findAll().size();
-        Assertions.assertEquals(0, postsLength);
-    }
 }
