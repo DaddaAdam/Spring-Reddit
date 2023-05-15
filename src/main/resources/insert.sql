@@ -15,5 +15,4 @@ insert ignore into vote(vote_type, post_id, user_id) values (1, 1, 1);
 insert ignore into vote(vote_type, post_id, user_id) values (1, 1, 2);
 insert ignore into vote(vote_type, post_id, user_id) values (-1, 1, 3);
 insert ignore into vote(vote_type, post_id, user_id) values (1, 2, 2);
-insert ignore into vote(vote_type, post_id, user_id) values (1, 3, 1);
 insert ignore into vote(vote_type, post_id, user_id) values (1, 4, 1);
