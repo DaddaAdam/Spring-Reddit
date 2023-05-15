@@ -3,10 +3,7 @@ package com.emsi.springreddit.service;
 import com.emsi.springreddit.dto.request.PostRequest;
 import com.emsi.springreddit.entities.Post;
 import com.emsi.springreddit.entities.User;
-import com.emsi.springreddit.entities.Vote;
-import com.emsi.springreddit.entities.VoteType;
 import com.emsi.springreddit.repository.PostRepository;
-import com.emsi.springreddit.repository.VoteRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,8 +17,7 @@ import java.util.Objects;
 public class PostService {
     private final PostRepository postRepository;
     private final SubredditService subredditService;
-    private final VoteRepository voteRepository;
-
+    private final VoteService voteService;
     public Post getPostById(Long id){
         try {
             return postRepository.findById(id).orElseThrow();
@@ -80,52 +76,14 @@ public class PostService {
     @Transactional
     public void upvotePost(Long id, User user){
         var post = postRepository.findById(id).orElseThrow();
-        var votes = post.getVotes();
-        for (Vote vote : votes) {
-            if (vote.getUser().getUsername().equals(user.getUsername())) {
-                if (vote.getVoteType() == VoteType.DOWNVOTE) {
-                    vote.setVoteType(VoteType.UPVOTE);
-                    post.setVoteCount(post.getVoteCount() + 2);
-                    voteRepository.save(vote);
-                    postRepository.save(post);
-                    return;
-                } else if (vote.getVoteType() == VoteType.UPVOTE) {
-                    return;
-                }
-            }
-        }
-        var vote = new Vote();
-        vote.setUser(user);
-        vote.setPost(post);
-        vote.setVoteType(VoteType.UPVOTE);
-        post.setVoteCount(post.getVoteCount() + 1);
-        voteRepository.save(vote);
+        post.setVoteCount(post.getVoteCount() + voteService.upvotePost(post, user));
         postRepository.save(post);
     }
 
     @Transactional
     public void downvotePost(Long id, User user){
         var post = postRepository.findById(id).orElseThrow();
-        var votes = post.getVotes();
-        for (Vote vote : votes) {
-            if (vote.getUser().getUsername().equals(user.getUsername())) {
-                if (vote.getVoteType() == VoteType.UPVOTE) {
-                    vote.setVoteType(VoteType.DOWNVOTE);
-                    post.setVoteCount(post.getVoteCount() - 2);
-                    voteRepository.save(vote);
-                    postRepository.save(post);
-                    return;
-                } else if (vote.getVoteType() == VoteType.DOWNVOTE) {
-                    return;
-                }
-            }
-        }
-        var vote = new Vote();
-        vote.setUser(user);
-        vote.setPost(post);
-        vote.setVoteType(VoteType.DOWNVOTE);
-        post.setVoteCount(post.getVoteCount() - 1);
-        voteRepository.save(vote);
+        post.setVoteCount(post.getVoteCount() + voteService.downvotePost(post, user));
         postRepository.save(post);
     }
 }
