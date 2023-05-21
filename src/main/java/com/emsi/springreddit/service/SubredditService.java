@@ -53,7 +53,7 @@ public class SubredditService {
             if(Objects.requireNonNull(exception.getRootCause()).getMessage().startsWith("Duplicate entry")){
                 throw new DataIntegrityViolationException("Subreddit already exists");
             }
-            throw new DataIntegrityViolationException(exception.getRootCause().getMessage());
+            throw new DataIntegrityViolationException(Objects.requireNonNull(exception.getRootCause()).getMessage());
         }
     }
 

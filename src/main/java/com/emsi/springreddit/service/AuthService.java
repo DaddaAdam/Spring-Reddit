@@ -52,7 +52,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        String token = generateVerificationToken(user);
+        generateVerificationToken(user);
     }
 
     private String generateVerificationToken(User user) {
