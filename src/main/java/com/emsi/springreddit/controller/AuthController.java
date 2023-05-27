@@ -34,9 +34,9 @@ public class AuthController {
 
         }catch(UserAlreadyExistsException exception){
             return ResponseEntity
-                    .status(HttpStatus.CREATED)
+                    .status(HttpStatus.BAD_REQUEST)
                     .body(new RegisterResponse(
-                            HttpStatus.CREATED.value(),
+                            HttpStatus.BAD_REQUEST.value(),
                             "User Already Exists",
                             exception.getMessage())
                     );
