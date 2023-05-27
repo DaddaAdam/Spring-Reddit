@@ -15,6 +15,7 @@ import static com.emsi.springreddit.controller.SubredditController.getGenericRes
 @RestController
 @RequestMapping("/api/post")
 @AllArgsConstructor
+@CrossOrigin(originPatterns = "*")
 public class PostController {
     private final PostService postService;
     @GetMapping(path = "/{id}", produces = "application/json")

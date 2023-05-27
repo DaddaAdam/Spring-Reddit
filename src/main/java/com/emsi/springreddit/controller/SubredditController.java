@@ -15,6 +15,7 @@ import org.springframework.web.client.HttpClientErrorException;
 @RestController
 @RequestMapping("/api/subreddit")
 @AllArgsConstructor
+@CrossOrigin(originPatterns = "*")
 public class SubredditController {
     private final SubredditService subredditService;
 
