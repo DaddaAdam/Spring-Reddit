@@ -6,10 +6,12 @@ import com.emsi.springreddit.entities.User;
 import com.emsi.springreddit.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
@@ -22,7 +24,7 @@ public class PostService {
             return postRepository.findById(id).orElseThrow();
         }
         catch (Exception exception){
-            throw new RuntimeException("Post not found");
+            throw new NoSuchElementException("Post not found");
         }
     }
 
@@ -31,7 +33,7 @@ public class PostService {
         if (postRequest.getTitle() == null || postRequest.getTitle().isBlank()) throw new DataIntegrityViolationException("Post title is required");
         if (postRequest.getContent() == null || postRequest.getContent().isBlank()) throw new DataIntegrityViolationException("Post content is required");
         if (postRequest.getUrl() == null || postRequest.getUrl().isBlank()) throw new DataIntegrityViolationException("Post url is required");
-        if (!postRequest.getUrl().matches("^(http|https)://.*$")) throw new DataIntegrityViolationException("Post url is invalid");
+        if (!UrlValidator.getInstance().isValid(postRequest.getUrl())) throw new DataIntegrityViolationException("Post url is invalid");
 
         var post = new Post();
         post.setPostName(postRequest.getTitle());
@@ -45,10 +47,9 @@ public class PostService {
 
     @Transactional
     public Post updatePost(Long id, PostRequest postRequest, User user){
-        if (postRequest.getTitle().isBlank()) throw new DataIntegrityViolationException("Post title is required");
-        if (postRequest.getContent().isBlank()) throw new DataIntegrityViolationException("Post content is required");
-        if (postRequest.getUrl().isBlank()) throw new DataIntegrityViolationException("Post url is required");
-        if (!postRequest.getUrl().matches("^(http|https)://.*$")) throw new DataIntegrityViolationException("Post url is invalid");
+        if (postRequest.getUrl() != null && !UrlValidator.getInstance().isValid(postRequest.getUrl())) throw new DataIntegrityViolationException("Post url is invalid");
+        if (postRequest.getContent() != null && postRequest.getContent().isBlank()) throw new DataIntegrityViolationException("Post content is invalid");
+        if (postRequest.getTitle() != null && postRequest.getTitle().isBlank()) throw new DataIntegrityViolationException("Post title is invalid");
 
         var post = postRepository.findById(id).orElseThrow();
         if(!post.getUser().getUsername().equals(user.getUsername())) throw new RuntimeException("You are not allowed to update this post");
