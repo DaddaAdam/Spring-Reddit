@@ -16,3 +16,7 @@ insert ignore into vote(vote_type, post_id, user_id) values (1, 1, 2);
 insert ignore into vote(vote_type, post_id, user_id) values (-1, 1, 3);
 insert ignore into vote(vote_type, post_id, user_id) values (1, 2, 2);
 insert ignore into vote(vote_type, post_id, user_id) values (1, 4, 1);
+
+insert ignore into comment(created_date, text, post_id, user_id) values (current_time(), 'Comment 1', 1, 1);
+insert ignore into comment(created_date, text, post_id, user_id) values (current_time(), 'Comment 2', 1, 1);
+insert ignore into comment(created_date, text, post_id, user_id) values (current_time(), 'Comment 3', 1, 2);
