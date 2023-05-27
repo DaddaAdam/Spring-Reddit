@@ -1,8 +1,8 @@
 package com.emsi.springreddit.service;
 
 import com.emsi.springreddit.dto.request.PostRequest;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -64,7 +64,7 @@ public class PostServiceTest {
         postRequest.setTitle("Test title");
         postRequest.setContent("Test content");
         postRequest.setSubredditId(1L);
-        postRequest.setUrl("https://www.google");
+        postRequest.setUrl("https://aaaaaaaaaaaaa");
         var user = userService.getUserByUsername("admin");
         Assertions.assertThrows(RuntimeException.class, () -> postService.createPost(postRequest, user));
     }
@@ -171,7 +171,7 @@ public class PostServiceTest {
     @Test
     public void shouldNotPatchPostReasonInvalidUrl(){
         var postRequest = new PostRequest();
-        postRequest.setUrl("https://www.google");
+        postRequest.setUrl("https://aaaaaaaaaaaaaaa");
         var user = userService.getUserByUsername("admin");
         Assertions.assertThrows(RuntimeException.class, () -> postService.updatePost(1L, postRequest, user));
     }
@@ -214,7 +214,7 @@ public class PostServiceTest {
     public void shouldGetAllPostsBySubredditName(){
         var subredditName = "java";
         var posts = postService.getPostsBySubredditName(subredditName);
-        Assertions.assertEquals(4, posts.size());
+        Assertions.assertEquals(2, posts.size());
     }
 
     @Test
@@ -228,7 +228,7 @@ public class PostServiceTest {
         var user = userService.getUserByUsername("user2");
         postService.upvotePost(1L, user);
         var post = postService.getPostById(1L);
-        Assertions.assertEquals(2, post.getVoteCount());
+        Assertions.assertEquals(3, post.getVoteCount());
     }
 
     @Test

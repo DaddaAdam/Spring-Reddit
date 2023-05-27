@@ -3,6 +3,7 @@ package com.emsi.springreddit.controller;
 import com.emsi.springreddit.dto.GenericResponse;
 import com.emsi.springreddit.dto.request.PostRequest;
 import com.emsi.springreddit.entities.User;
+import com.emsi.springreddit.service.CommentService;
 import com.emsi.springreddit.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import static com.emsi.springreddit.controller.SubredditController.getGenericRes
 @CrossOrigin(originPatterns = "*")
 public class PostController {
     private final PostService postService;
+    private final CommentService commentService;
     @GetMapping(path = "/{id}", produces = "application/json")
     public ResponseEntity<GenericResponse> getPostById(@PathVariable Long id){
         try {
@@ -28,6 +30,23 @@ public class PostController {
                             "Post found",
                             null,
                             postService.getPostById(id)
+                    ));
+        }
+        catch (Exception exception){
+            return this.handleExceptions(exception);
+        }
+    }
+
+    @GetMapping(path = "/{id}/comments", produces = "application/json")
+    public ResponseEntity<GenericResponse> getPostComments(@PathVariable Long id){
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new GenericResponse(
+                            HttpStatus.OK.value(),
+                            "Comments Found",
+                            null,
+                            commentService.getPostComments(id)
                     ));
         }
         catch (Exception exception){
