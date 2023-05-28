@@ -28,6 +28,10 @@ public class PostService {
         }
     }
 
+    public List<Post> getPostsByUser(User user){
+        return postRepository.findByUser(user);
+    }
+
     @Transactional
     public Post createPost(PostRequest postRequest, User user){
         if (postRequest.getTitle() == null || postRequest.getTitle().isBlank()) throw new DataIntegrityViolationException("Post title is required");

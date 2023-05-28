@@ -109,6 +109,24 @@ public class PostController {
         }
     }
 
+    @GetMapping(path= "/me" , produces = "application/json")
+    public ResponseEntity<GenericResponse> getCurrentUserPosts(){
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new GenericResponse(
+                            HttpStatus.OK.value(),
+                            "Posts found",
+                            null,
+                            postService.getPostsByUser(user)
+                    ));
+        }
+        catch (Exception exception){
+            return this.handleExceptions(exception);
+        }
+    }
+
     @GetMapping(path = "/sub-name/{name}", produces = "application/json")
     public ResponseEntity<GenericResponse> getPostsBySubredditName(@PathVariable String name){
         try {
