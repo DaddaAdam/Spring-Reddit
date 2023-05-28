@@ -20,7 +20,7 @@ public class SubredditService {
 
     public Subreddit getSubredditByName(String subredditName){
         try {
-            return subredditRepository.findByName(subredditName).orElseThrow();
+            return subredditRepository.findFirstByName(subredditName).orElseThrow();
         }
         catch (NoSuchElementException exception){
             throw new NoSuchElementException("Subreddit not found");
