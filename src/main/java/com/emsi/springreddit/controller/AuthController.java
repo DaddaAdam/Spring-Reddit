@@ -1,16 +1,21 @@
 package com.emsi.springreddit.controller;
 
+import com.emsi.springreddit.dto.GenericResponse;
 import com.emsi.springreddit.dto.request.AuthenticationRequest;
 import com.emsi.springreddit.dto.request.RegisterRequest;
 import com.emsi.springreddit.dto.response.AuthenticationResponse;
 import com.emsi.springreddit.dto.response.RegisterResponse;
+import com.emsi.springreddit.entities.User;
 import com.emsi.springreddit.exception.UserAlreadyExistsException;
 import com.emsi.springreddit.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
 
 
 @RestController
@@ -61,5 +66,21 @@ public class AuthController {
                             exception.getMessage())
                     );
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<GenericResponse> me() {
+        try {
+            var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (user == null) throw new NoSuchElementException("User not auth");
+            return ResponseEntity.status(200).body(new GenericResponse(200, "OK", null, user));
+        }
+        catch (NoSuchElementException exception){
+            return ResponseEntity.status(401).body(new GenericResponse(401, "Not authorized", "Not authorized", null));
+        }
+        catch (Exception exception){
+            return ResponseEntity.status(500).body(new GenericResponse(500, "Internal Server Error", exception.getMessage(), null));
+        }
+
     }
 }
